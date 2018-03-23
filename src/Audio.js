@@ -42,7 +42,9 @@ export default class Audio extends HTMLAudioElement {
       this.dispatchEvent({ type: 'pause' })
     })
     innerAudioContext.onEnded(() => {
-      this.dispatchEvent({ type: 'ended' })
+      if (_innerAudioContext.get(this).loop === false) {
+          this.dispatchEvent({ type: 'ended' })
+      }
       this.readyState = HAVE_ENOUGH_DATA
     })
     innerAudioContext.onError(() => {
@@ -120,6 +122,14 @@ export default class Audio extends HTMLAudioElement {
 
   get paused() {
     return _innerAudioContext.get(this).paused
+  }
+
+  get volume() {
+      return _innerAudioContext.get(this).volume;
+  }
+
+  set volume(value) {
+      _innerAudioContext.get(this).volume = value;
   }
 
   cloneNode() {
