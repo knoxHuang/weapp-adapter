@@ -1,6 +1,7 @@
 export default class DeviceMotionEvent {
   constructor() {
     this.type = 'devicemotion';
+    this.accelerationIncludingGravity = null;
   }
 }
 
