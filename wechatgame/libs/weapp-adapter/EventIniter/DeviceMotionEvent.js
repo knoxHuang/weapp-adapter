@@ -5,7 +5,7 @@ export default class DeviceMotionEvent {
   }
 }
 
-wx.onAccelerometerChange(function (res) {
+wx.onAccelerometerChange && wx.onAccelerometerChange(function (res) {
   var deviceMotionEvent = new DeviceMotionEvent();
   deviceMotionEvent.accelerationIncludingGravity = res;
 
