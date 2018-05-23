@@ -32,7 +32,7 @@ var non_text_format = [
 const REGEX = /^\w+:\/\/.*/;
 
 // has sub domain
-var isSubdomain = wx.getGroupCloudStorage && wx.getFriendCloudStorage;
+var isSubdomain = !wx.getFileSystemManager;
 
 var fs = isSubdomain ? {} : wx.getFileSystemManager();
 
