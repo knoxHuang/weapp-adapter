@@ -11,7 +11,12 @@ export const screen = {
   availLeft: 0,
   availTop: 0,
 }
-export const performance = wx.getPerformance ? wx.getPerformance() : null;
+
+var performance = wx.getPerformance ? wx.getPerformance() : null;
+performance.now = function () {
+    return Date.now();
+};
+
 export const ontouchstart = null
 export const ontouchmove = null
 export const ontouchend = null
