@@ -1,1 +1,2 @@
 require('./Editbox');
+require('./DeviceMotionEvent');
