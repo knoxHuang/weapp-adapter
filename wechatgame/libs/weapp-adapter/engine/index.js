@@ -1,1 +1,2 @@
 require('./DeviceMotionEvent');
+require('./CCLoader');
