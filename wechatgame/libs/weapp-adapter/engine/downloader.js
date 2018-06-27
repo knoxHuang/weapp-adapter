@@ -1,4 +1,4 @@
-cc.loader.loadSubpackage = function (name, completeCallback) {
+cc.loader.downloader.loadSubpackage = function (name, completeCallback) {
     wx.loadSubpackage({
         name: name,
         success: completeCallback,
