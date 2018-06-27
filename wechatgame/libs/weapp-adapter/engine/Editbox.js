@@ -23,6 +23,29 @@
         return 'done';
     }
 
+    function updateLabelsVisibility(editBox) {
+        let placeholderLabel = editBox._placeholderLabel;
+        let textLabel = editBox._textLabel;
+        let displayText = editBox._impl._text;
+  
+        placeholderLabel.node.active = displayText === '';
+        textLabel.node.active = displayText !== '';
+    }
+
+    cc.EditBox.prototype.editBoxEditingDidBegan = function () {
+        cc.Component.EventHandler.emitEvents(this.editingDidBegan, this);
+        this.node.emit('editing-did-began', this);
+    }
+
+    cc.EditBox.prototype.editBoxEditingDidEnded = function () {
+        cc.Component.EventHandler.emitEvents(this.editingDidEnded, this);
+        this.node.emit('editing-did-ended', this);
+    }
+
+    cc.EditBox.prototype._updateStayOnTop = function () {
+        // wx not support
+    }
+
     _p.createInput = function () {
         this.removeDom();
 
@@ -52,6 +75,7 @@
                 if (editBoxImpl._text !== res.value) {
                     editBoxImpl._text = res.value;
                     editBoxImpl._delegate.editBoxTextChanged(editBoxImpl._text);
+                    updateLabelsVisibility(editBoxImpl._delegate);
                 }
             }
         }
@@ -66,7 +90,7 @@
         tmpEdTxt.focus = function () {
             wx.showKeyboard({
                 defaultValue: editBoxImpl._text,
-                maxLength: 140,
+                maxLength: editBoxImpl._maxLength,
                 multiple: multiline,
                 confirmHold: true,
                 confirmType: getKeyboardReturnType(editBoxImpl._returnType),
