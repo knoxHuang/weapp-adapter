@@ -2,10 +2,10 @@ cc.loader.downloader.loadSubpackage = function (name, completeCallback) {
     wx.loadSubpackage({
         name: name,
         success: function () {
-            completeCallback();
+            if (completeCallback) completeCallback();
         },
         fail: function () {
-            completeCallback(new Error(`Failed to load subpackage ${name}`));
+            if (completeCallback) completeCallback(new Error(`Failed to load subpackage ${name}`));
         }
     })
 };
