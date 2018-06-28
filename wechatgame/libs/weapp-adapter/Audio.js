@@ -36,24 +36,31 @@ export default class Audio extends HTMLAudioElement {
       this.readyState = HAVE_CURRENT_DATA
     })
     innerAudioContext.onPlay(() => {
+      this._paused = _innerAudioContext.get(this).paused
       this.dispatchEvent({ type: 'play' })
     })
     innerAudioContext.onPause(() => {
+      this._paused = _innerAudioContext.get(this).paused
       this.dispatchEvent({ type: 'pause' })
     })
     innerAudioContext.onEnded(() => {
+      this._paused = _innerAudioContext.get(this).paused	
       if (_innerAudioContext.get(this).loop === false) {
           this.dispatchEvent({ type: 'ended' })
       }
       this.readyState = HAVE_ENOUGH_DATA
     })
     innerAudioContext.onError(() => {
+      this._paused = _innerAudioContext.get(this).paused	
       this.dispatchEvent({ type: 'error' })
     })
 
     if (url) {
       _innerAudioContext.get(this).src = url
     }
+    this._paused = innerAudioContext.paused
+    this._volume = innerAudioContext.volume
+    this._muted = false;
   }
 
   load() {
@@ -121,16 +128,33 @@ export default class Audio extends HTMLAudioElement {
   }
 
   get paused() {
-    return _innerAudioContext.get(this).paused
+    return this._paused;
   }
 
   get volume() {
-      return _innerAudioContext.get(this).volume;
+    return this._volume;
   }
 
   set volume(value) {
-      _innerAudioContext.get(this).volume = value;
+    this._volume = value;
+    if (!this._muted) {
+        _innerAudioContext.get(this).volume = value;
+    }
   }
+
+  get muted() {
+    return this._muted;
+  }
+
+  set muted(value) {
+    this._muted = value;
+    if (value) {
+        _innerAudioContext.get(this).volume = 0;
+    } else {
+        _innerAudioContext.get(this).volume = this._volume;
+    }
+  }
+
 
   cloneNode() {
     const newAudio = new Audio()
