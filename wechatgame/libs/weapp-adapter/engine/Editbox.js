@@ -35,16 +35,23 @@
     cc.EditBox.prototype.editBoxEditingDidBegan = function () {
         cc.Component.EventHandler.emitEvents(this.editingDidBegan, this);
         this.node.emit('editing-did-began', this);
-    }
+    };
 
     cc.EditBox.prototype.editBoxEditingDidEnded = function () {
         cc.Component.EventHandler.emitEvents(this.editingDidEnded, this);
         this.node.emit('editing-did-ended', this);
-    }
+    };
 
     cc.EditBox.prototype._updateStayOnTop = function () {
-        // wx not support
-    }
+        if (this.stayOnTop) {
+            this._hideLabels();
+        }
+        else {
+            this._showLabels();
+        }
+        //// wx not support
+        //this._impl.stayOnTop(this.stayOnTop);
+    };
 
     _p.createInput = function () {
         this.removeDom();
