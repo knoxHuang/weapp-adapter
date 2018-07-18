@@ -19,4 +19,7 @@ if (cc.sys.browserType === cc.sys.BROWSER_TYPE_WECHAT_GAME_SUB) {
     });
 }
 
+// Release Image objects after uploaded gl texture
+cc.macro.CLEANUP_IMAGE_CACHE = true;
+
 window.boot();
