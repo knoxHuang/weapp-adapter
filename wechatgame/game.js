@@ -18,8 +18,10 @@ if (cc.sys.browserType === cc.sys.BROWSER_TYPE_WECHAT_GAME_SUB) {
         cc.Pipeline.Downloader.PackDownloader._doPreload("WECHAT_SUBDOMAIN", settings.WECHAT_SUBDOMAIN_DATA);
     });
 }
+else {
+    // Release Image objects after uploaded gl texture
+    cc.macro.CLEANUP_IMAGE_CACHE = true;
+}
 
-// Release Image objects after uploaded gl texture
-cc.macro.CLEANUP_IMAGE_CACHE = true;
 
 window.boot();
