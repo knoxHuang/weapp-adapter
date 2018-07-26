@@ -28,7 +28,8 @@ export default class WebSocket {
 
     const socketTask = wx.connectSocket({
       url,
-      protocols: Array.isArray(protocols) ? protocols : [protocols]
+      protocols: Array.isArray(protocols) ? protocols : [protocols],
+      tcpNoDelay: true
     })
 
     _socketTask.set(this, socketTask)
