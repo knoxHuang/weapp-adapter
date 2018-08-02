@@ -99,7 +99,7 @@
                 defaultValue: editBoxImpl._text,
                 maxLength: editBoxImpl._maxLength,
                 multiple: multiline,
-                confirmHold: true,
+                confirmHold: false,  // hide keyboard mannually by wx.onKeyboardConfirm
                 confirmType: getKeyboardReturnType(editBoxImpl._returnType),
                 success: function (res) {
                     editBoxImpl._delegate && editBoxImpl._delegate.editBoxEditingDidBegan && editBoxImpl._delegate.editBoxEditingDidBegan();
