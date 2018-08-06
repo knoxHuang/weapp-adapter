@@ -9,3 +9,13 @@ cc.loader.downloader.loadSubpackage = function (name, completeCallback) {
         }
     })
 };
+
+cc.loader.downloader.addHandlers({
+    pvr: cc.loader.downloader.extMap.png,
+    etc: cc.loader.downloader.extMap.png
+});
+
+cc.loader.loader.addHandlers({
+    pvr: cc.loader.loader.extMap.png,
+    etc: cc.loader.loader.extMap.png
+});
