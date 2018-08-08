@@ -71,6 +71,10 @@ export default class Audio extends HTMLAudioElement {
     _innerAudioContext.get(this).play()
   }
 
+  resume() {
+    _innerAudioContext.get(this).resume()
+  }
+
   pause() {
     _innerAudioContext.get(this).pause()
   }
