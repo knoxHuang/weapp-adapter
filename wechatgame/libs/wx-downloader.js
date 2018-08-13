@@ -105,6 +105,9 @@ WXDownloader.prototype.cleanOldAssets = function () {
             cc.warn(err);
         }
         else {
+            for (let i = 0; i < _newAssets.length; ++i) {
+                cc.log('reserve local file: ' + _newAssets[i]);
+            }
             cc.log('Clean old Assets successfully!');
         }
     });
@@ -127,7 +130,6 @@ function cleanAllFiles(path, newAssets, finish) {
                     else {
                         // remove old assets
                         if (newAssets && newAssets.indexOf(dirPath) !== -1) {
-                            cc.log('reserve local file: ' + dirPath);
                             next(idx + 1);
                             return;
                         }
@@ -214,13 +216,14 @@ function readText (item, callback) {
 function readFromLocal (item, callback) {
     var localPath = wx.env.USER_DATA_PATH + '/' + item.url;
 
-    // cache new asset
-    _newAssets.push(localPath);
-
     // Read from local file cache
     fs.access({
         path: localPath,
         success: function () {
+
+            // cache new asset
+            _newAssets.push(localPath);
+
             item.url = localPath;
             if (item.type && non_text_format.indexOf(item.type) !== -1) {
                 nextPipe(item, callback);
