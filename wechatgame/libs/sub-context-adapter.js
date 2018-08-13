@@ -1,3 +1,11 @@
+var settings = window._CCSettings;
+
+cc.director.once(cc.Director.EVENT_BEFORE_SCENE_LOADING, function () {
+    cc.Pipeline.Downloader.PackDownloader._doPreload("WECHAT_SUBDOMAIN", settings.WECHAT_SUBDOMAIN_DATA);
+});
+
+// Canvas component adaptation
+
 cc.Canvas.prototype.update = function () {
     if (this._width !== cc.game.canvas.width || this._height !== cc.game.canvas.height) {
         this.applySettings();
