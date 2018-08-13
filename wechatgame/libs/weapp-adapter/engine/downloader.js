@@ -10,9 +10,17 @@ cc.loader.downloader.loadSubpackage = function (name, completeCallback) {
     })
 };
 
+function downloadScript (item, callback, isAsync) {
+    let url = '../../../' + item.url;
+    require(url);
+    callback(null, item.url);
+}
+
 cc.loader.downloader.addHandlers({
+    js : downloadScript,
+
     pvr: cc.loader.downloader.extMap.png,
-    etc: cc.loader.downloader.extMap.png
+    etc: cc.loader.downloader.extMap.png,
 });
 
 cc.loader.loader.addHandlers({
