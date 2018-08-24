@@ -27,14 +27,6 @@ export default class Audio extends HTMLAudioElement {
 
     _innerAudioContext.set(this, innerAudioContext)
 
-    innerAudioContext.onCanplay(() => {
-      this.dispatchEvent({ type: 'load' })
-      this.dispatchEvent({ type: 'loadend' })
-      this.dispatchEvent({ type: 'canplay'})
-      this.dispatchEvent({ type: 'canplaythrough' })
-      this.dispatchEvent({ type: 'loadedmetadata' })
-      this.readyState = HAVE_CURRENT_DATA
-    })
     innerAudioContext.onPlay(() => {
       this._paused = _innerAudioContext.get(this).paused
       this.dispatchEvent({ type: 'play' })
@@ -64,7 +56,8 @@ export default class Audio extends HTMLAudioElement {
   }
 
   load() {
-    console.warn('HTMLAudioElement.load() is not implemented.')
+    // console.warn('HTMLAudioElement.load() is not implemented.')
+    this._onLoad();
   }
 
   play() {
@@ -112,7 +105,30 @@ export default class Audio extends HTMLAudioElement {
 
   set src(value) {
     _src.set(this, value)
-    _innerAudioContext.get(this).src = value
+
+    const innerAudioContext = _innerAudioContext.get(this)
+
+    this._loaded = false;
+    this._firedCanplay = false;
+
+    innerAudioContext.onCanplay(() => {
+      this._loaded = true;
+      this._onLoad();
+    })
+    innerAudioContext.src = value
+  }
+
+  _onLoad() {
+    if (!this._loaded || this._firedCanplay) {
+        return;
+    }
+    this.dispatchEvent({ type: 'load' })
+    this.dispatchEvent({ type: 'loadend' })
+    this.dispatchEvent({ type: 'canplay' })
+    this.dispatchEvent({ type: 'canplaythrough' })
+    this.dispatchEvent({ type: 'loadedmetadata' })
+    this.readyState = this.HAVE_CURRENT_DATA
+    this._firedCanplay = true;
   }
 
   get loop() {
@@ -158,7 +174,6 @@ export default class Audio extends HTMLAudioElement {
         _innerAudioContext.get(this).volume = this._volume;
     }
   }
-
 
   cloneNode() {
     const newAudio = new Audio()
