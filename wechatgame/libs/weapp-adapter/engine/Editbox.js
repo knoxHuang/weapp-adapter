@@ -66,7 +66,7 @@
             editBoxImpl._delegate && editBoxImpl._delegate.editBoxEditingReturn && editBoxImpl._delegate.editBoxEditingReturn();
             wx.hideKeyboard({
                 success: function (res) {
-                    editBoxImpl._delegate && editBoxImpl._delegate.editBoxEditingDidEnded && editBoxImpl._delegate.editBoxEditingDidEnded();
+                    
                 },
                 fail: function (res) {
                     cc.warn(res.errMsg);
