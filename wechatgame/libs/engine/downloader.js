@@ -11,9 +11,15 @@ cc.loader.downloader.loadSubpackage = function (name, completeCallback) {
 };
 
 function downloadScript (item, callback, isAsync) {
-    let url = '../../../' + item.url;
+    let url = '../../' + item.url;
     require(url);
     callback(null, item.url);
+}
+
+function loadFont (item) {
+    let url = item.url;
+    let fontFamily = wx.loadFont(url);
+    return fontFamily || 'Arial';
 }
 
 cc.loader.downloader.addHandlers({
@@ -25,5 +31,13 @@ cc.loader.downloader.addHandlers({
 
 cc.loader.loader.addHandlers({
     pvr: cc.loader.loader.extMap.png,
-    etc: cc.loader.loader.extMap.png
+    etc: cc.loader.loader.extMap.png,
+
+    // Font
+    font: loadFont,
+    eot: loadFont,
+    ttf: loadFont,
+    woff: loadFont,
+    svg: loadFont,
+    ttc: loadFont,
 });
