@@ -30,9 +30,6 @@ cc.view.convertToLocationInView = function (tx, ty, relatedPos, out) {
     return result;
 };
 
-// Overwrite wx.onMessage
-let userOnMessage = null;
-
 wx.onMessage(function (data) {
     if (data.fromEngine) {
         if (data.event === 'viewport') {
@@ -42,14 +39,7 @@ wx.onMessage(function (data) {
             viewportInMain.height = data.height;
         }
     }
-    else if (userOnMessage) {
-        userOnMessage(data);
-    }
 });
-
-wx.onMessage = function (callback) {
-    userOnMessage = callback;
-}
 
 // Canvas component adaptation
 
