@@ -48,7 +48,7 @@
     };
 
     _p.setFocus = function () {
-        this.createInput();
+        this._beginEditing();
     };
 
     _p.isFocused = function () {
