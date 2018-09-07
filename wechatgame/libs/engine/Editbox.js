@@ -5,7 +5,7 @@
     
     let KeyboardReturnType = cc.EditBox.KeyboardReturnType;
     let _p = cc.EditBox._EditBoxImpl.prototype;
-    let _global = {};
+    let _currentEditBoxImpl = null;
 
     function getKeyboardReturnType (type) {
         switch (type) {
@@ -70,14 +70,14 @@
 
     _p.createInput = function () {
         // Unregister keyboard event listener in old editBoxImpl if keyboard haven't hidden.
-        if (_global.currentEditBoxImpl !== this) {
-            if (_global.currentEditBoxImpl) {
-                _global.currentEditBoxImpl._endEditing();
-                wx.offKeyboardConfirm(_global.currentEditBoxImpl.onKeyboardConfirmCallback);
-                wx.offKeyboardInput(_global.currentEditBoxImpl.onKeyboardInputCallback);
-                wx.offKeyboardComplete(_global.currentEditBoxImpl.onKeyboardCompleteCallback);
+        if (_currentEditBoxImpl !== this) {
+            if (_currentEditBoxImpl) {
+                _currentEditBoxImpl._endEditing();
+                wx.offKeyboardConfirm(_currentEditBoxImpl.onKeyboardConfirmCallback);
+                wx.offKeyboardInput(_currentEditBoxImpl.onKeyboardInputCallback);
+                wx.offKeyboardComplete(_currentEditBoxImpl.onKeyboardCompleteCallback);
             }
-            _global.currentEditBoxImpl = this;
+            _currentEditBoxImpl = this;
         }
 
         let multiline = this._inputMode === cc.EditBox.InputMode.ANY;
@@ -115,7 +115,7 @@
             wx.offKeyboardConfirm(onKeyboardConfirmCallback);
             wx.offKeyboardInput(onKeyboardInputCallback);
             wx.offKeyboardComplete(onKeyboardCompleteCallback);
-            _global.currentEditBoxImpl = null;
+            _currentEditBoxImpl = null;
         }
         
         wx.showKeyboard({
