@@ -5,6 +5,7 @@
     
     let KeyboardReturnType = cc.EditBox.KeyboardReturnType;
     let _p = cc.EditBox._EditBoxImpl.prototype;
+    let _global = {};
 
     function getKeyboardReturnType (type) {
         switch (type) {
@@ -43,23 +44,45 @@
     };
 
     cc.EditBox.prototype._updateStayOnTop = function () {
-        if (this.stayOnTop) {
-            this._hideLabels();
-        }
-        else {
-            this._showLabels();
-        }
-        //// wx not support
-        //this._impl.stayOnTop(this.stayOnTop);
+        // wx not support
+    };
+
+    _p.setFocus = function () {
+        this.createInput();
+    };
+
+    _p.isFocused = function () {
+        return this._editing;
+    };
+
+    _p.setInputMode = function (inputMode) {
+        this._inputMode = inputMode;
+    };
+
+    _p._beginEditing = function () {
+        this.createInput();
+    };
+
+    _p._endEditing = function () {
+        this._delegate && this._delegate.editBoxEditingDidEnded();
+        this._editing = false;
     };
 
     _p.createInput = function () {
-        this.removeDom();
+        // Unregister keyboard event listener in old editBoxImpl if keyboard haven't hidden.
+        if (_global.currentEditBoxImpl !== this) {
+            if (_global.currentEditBoxImpl) {
+                _global.currentEditBoxImpl._endEditing();
+                wx.offKeyboardConfirm(_global.currentEditBoxImpl.onKeyboardConfirmCallback);
+                wx.offKeyboardInput(_global.currentEditBoxImpl.onKeyboardInputCallback);
+                wx.offKeyboardComplete(_global.currentEditBoxImpl.onKeyboardCompleteCallback);
+            }
+            _global.currentEditBoxImpl = this;
+        }
 
         let multiline = this._inputMode === cc.EditBox.InputMode.ANY;
         let editBoxImpl = this;
-        let tmpEdTxt = editBoxImpl._edTxt = document.createElement("input");
-        tmpEdTxt.type = "text";
+        this._editing = true;
 
         function onKeyboardConfirmCallback (res) {
             editBoxImpl._text = res.value;
@@ -92,37 +115,26 @@
             wx.offKeyboardConfirm(onKeyboardConfirmCallback);
             wx.offKeyboardInput(onKeyboardInputCallback);
             wx.offKeyboardComplete(onKeyboardCompleteCallback);
+            _global.currentEditBoxImpl = null;
         }
-
-        tmpEdTxt.focus = function () {
-            wx.showKeyboard({
-                defaultValue: editBoxImpl._text,
-                maxLength: editBoxImpl._maxLength,
-                multiple: multiline,
-                confirmHold: false,  // hide keyboard mannually by wx.onKeyboardConfirm
-                confirmType: getKeyboardReturnType(editBoxImpl._returnType),
-                success: function (res) {
-                    editBoxImpl._delegate && editBoxImpl._delegate.editBoxEditingDidBegan && editBoxImpl._delegate.editBoxEditingDidBegan();
-                },
-                fail: function (res) {
-                    cc.warn(res.errMsg);
-                    editBoxImpl._endEditing();
-                }
-            });
-            wx.onKeyboardConfirm(onKeyboardConfirmCallback);
-            wx.onKeyboardInput(onKeyboardInputCallback);
-            wx.onKeyboardComplete(onKeyboardCompleteCallback);
-        };
-    };
-
-    _p._beginEditing = function () {    
-        this._edTxt.focus();
         
-        if (cc.sys.isMobile && !this._editing) {
-            // Pre adaptation and
-            this._beginEditingOnMobile(this._editBox);
-        }
-        this._editing = true;
-    }
+        wx.showKeyboard({
+            defaultValue: editBoxImpl._text,
+            maxLength: editBoxImpl._maxLength,
+            multiple: multiline,
+            confirmHold: false,  // hide keyboard mannually by wx.onKeyboardConfirm
+            confirmType: getKeyboardReturnType(editBoxImpl._returnType),
+            success: function (res) {
+                editBoxImpl._delegate && editBoxImpl._delegate.editBoxEditingDidBegan && editBoxImpl._delegate.editBoxEditingDidBegan();
+            },
+            fail: function (res) {
+                cc.warn(res.errMsg);
+                editBoxImpl._endEditing();
+            }
+        });
+        wx.onKeyboardConfirm(onKeyboardConfirmCallback);
+        wx.onKeyboardInput(onKeyboardInputCallback);
+        wx.onKeyboardComplete(onKeyboardCompleteCallback);
+    };
 })();
 
