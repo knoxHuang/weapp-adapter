@@ -52,7 +52,7 @@ _cc.inputManager._unregisterAccelerometerEvent = function () {
     fail: function () {
       cc.error('unregister AccelerometerEvent failed !');
     },
-    success: function () {}, 
-    compvare: function () {},
+    success: function () {},
+    complete: function () {},
   });
 };
