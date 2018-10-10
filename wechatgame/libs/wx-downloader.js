@@ -29,6 +29,10 @@ var non_text_format = [
     'js','png','jpg','bmp','jpeg','gif','ico','tiff','webp','image','mp3','ogg','wav','m4a','font','eot','ttf','woff','svg','ttc'
 ];
 
+var binary_format = [
+    'bin'
+];
+
 const REGEX = /^\w+:\/\/.*/;
 
 // has sub domain
@@ -166,9 +170,18 @@ function nextPipe (item, callback) {
 
 function readText (item, callback) {
     var url = item.url;
+    var encodingFormat = 'utf8';
+    for (var i = 0; i < binary_format.length; i++) {
+        if (url.endsWith(binary_format[i])) {
+            // read as ArrayBuffer
+            encodingFormat = '';
+            break;
+        }
+    }
+
     fs.readFile({
         filePath: url,
-        encoding: 'utf8',
+        encoding: encodingFormat,
         success: function (res) {
             item.states[cc.loader.downloader.id] = cc.Pipeline.ItemState.COMPLETE;
             callback(null, res.data);
