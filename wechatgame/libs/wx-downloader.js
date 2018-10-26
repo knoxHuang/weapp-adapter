@@ -289,6 +289,7 @@ function downloadRemoteFile (item, callback) {
             }
             else if (res.tempFilePath) {
                 // http reading is not cached
+                var temp = res.tempFilePath;
                 var localPath = wx.env.USER_DATA_PATH + '/' + relatUrl;
                 // check and mkdir remote folder has exists
                 ensureDirFor(localPath, function () {
@@ -307,11 +308,16 @@ function downloadRemoteFile (item, callback) {
                             }
                         },
                         fail: function (res) {
-                            // Failed to save file, then just use remote url
-                            callback({
-                                status: 0,
-                                errorMessage: res && res.errMsg ? res.errMsg : "Download file failed: " + remoteUrl
-                            }, null);
+                            // Failed to save file, then just use temp
+                            console.log(res && res.errMsg ? res.errMsg : 'save file failed: ' + remoteUrl);
+                            console.log('It might be due to out of storage spaces, you can clean your storage spaces manually.');
+                            item.url = temp;
+                            if (item.type && non_text_format.indexOf(item.type) !== -1) {
+                                nextPipe(item, callback);
+                            }
+                            else {
+                                readText(item, callback);
+                            }
                         }
                     });
                 });
