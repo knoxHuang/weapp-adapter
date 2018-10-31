@@ -29,7 +29,7 @@ var non_text_format = [
     'js','png','jpg','bmp','jpeg','gif','ico','tiff','webp','image','pvr','etc','mp3','ogg','wav','m4a','font','eot','ttf','woff','svg','ttc'
 ];
 
-const REGEX = /^\w+:\/\/.*/;
+var REGEX = /^\w+:\/\/.*/;
 
 // has sub domain
 var isSubdomain = !wx.getFileSystemManager;
