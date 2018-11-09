@@ -25,3 +25,5 @@ cc.game._runMainLoop = function () {
     self._intervalId = window.requestAnimFrame(callback);
     self._paused = false;
 };
+// wechat game platform not support this api
+cc.game.end = function () {};
