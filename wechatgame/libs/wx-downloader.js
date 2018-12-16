@@ -35,10 +35,7 @@ var binary_format = [
 
 const REGEX = /^\w+:\/\/.*/;
 
-// has sub domain
-var isSubdomain = !wx.getFileSystemManager;
-
-var fs = isSubdomain ? {} : wx.getFileSystemManager();
+var fs = wx.getFileSystemManager ? wx.getFileSystemManager() : {};
 
 var _newAssets = [];
 var WXDownloader = window.WXDownloader = function () {
@@ -71,7 +68,7 @@ WXDownloader.prototype.handle = function (item, callback) {
         }
     }
 
-    if (isSubdomain) {
+    if (CC_WECHATGAME_SUB) {
         if (REGEX.test(item.url)) {
             callback(null, null);
             return;
