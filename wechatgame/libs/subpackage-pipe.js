@@ -39,7 +39,7 @@ var SubPackPipe = function (subpackage) {
     this.pipeline = null;
     for (var packName in subpackage) {
         var pack = subpackage[packName];
-        pack.uuids.forEach((val) => {
+        pack.uuids && pack.uuids.forEach((val) => {
             _uuidToSubPack[val] = pack.path;
         });
     }
