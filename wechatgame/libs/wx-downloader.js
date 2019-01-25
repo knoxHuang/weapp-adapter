@@ -165,7 +165,7 @@ function cleanAllFiles(path, newAssets, finish) {
             })(0);
         },
         fail: function (res) {
-            finish();
+            finish(res ? res.errMsg : 'unknown error');
         },
     });
 }
