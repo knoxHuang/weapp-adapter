@@ -29,7 +29,11 @@ var non_text_format = [
     'js','png','jpg','bmp','jpeg','gif','ico','tiff','webp','image','pvr','etc','mp3','ogg','wav','m4a','font','eot','ttf','woff','svg','ttc'
 ];
 
-var REGEX = /^\w+:\/\/.*/;
+var binary_format = [
+    'bin'
+];
+
+const REGEX = /^\w+:\/\/.*/;
 
 var fs = wx.getFileSystemManager ? wx.getFileSystemManager() : null;
 
@@ -201,9 +205,18 @@ function readText (item, callback) {
         return;
     }
     var url = item.url;
+    var encodingFormat = 'utf8';
+    for (var i = 0; i < binary_format.length; i++) {
+        if (url.endsWith(binary_format[i])) {
+            // read as ArrayBuffer
+            encodingFormat = '';
+            break;
+        }
+    }
+
     fs.readFile({
         filePath: url,
-        encoding: 'utf8',
+        encoding: encodingFormat,
         success: function (res) {
             var queue = cc.LoadingItems.getQueue(item);
             queue.addListener(item.id, function (item) {
