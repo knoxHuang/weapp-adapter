@@ -9,6 +9,9 @@ require('main');
 require(settings.debug ? 'cocos2d-js.js' : 'cocos2d-js-min.js');
 require('./libs/engine/index.js');
 
+// Adjust devicePixelRatio
+cc.view._maxPixelRatio = 3;
+
 wxDownloader.REMOTE_SERVER_ROOT = "";
 wxDownloader.SUBCONTEXT_ROOT = "";
 var pipeBeforeDownloader = cc.loader.md5Pipe || cc.loader.assetLoader;
