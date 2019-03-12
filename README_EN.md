@@ -1,5 +1,5 @@
 # weapp-adapter
-weapp-adapter of Wechat Tiny Game in ES6
+weapp-adapter of WeChat Tiny Game in ES6
 
 ----
 
