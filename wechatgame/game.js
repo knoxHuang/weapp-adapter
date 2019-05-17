@@ -5,8 +5,10 @@ require('libs/wx-downloader.js');
 require('src/settings');
 var settings = window._CCSettings;
 require('main');
-// Will be replaced cocos2d-js path at build time
+
+// Will be replaced with cocos2d-js path in editor
 require('cocos2d-js-path');
+
 require('./libs/engine/index.js');
 
 // Adjust devicePixelRatio
