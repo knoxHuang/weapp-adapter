@@ -51,11 +51,11 @@ WXDownloader.prototype.init = function () {
         // whether or not cache asset into user's storage space
         this.cacheAsset = true;
         // cache one per cycle
-        this.cachePeriod = 100;
+        this.cachePeriod = 500;
         // whether or not storage space is run out of
         this.outOfStorage = false;
 
-        this.writeFilePeriod = 1000;
+        this.writeFilePeriod = 2000;
 
         cacheQueue = {};
         packageFiles = {};
